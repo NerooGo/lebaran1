@@ -20,27 +20,6 @@
             flex-direction: column;
             padding: 20px;
         }
-        .stars {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            top: 0;
-            left: 0;
-        }
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            opacity: 0.8;
-            animation: twinkle 3s infinite;
-        }
-        @keyframes twinkle {
-            0% { opacity: 0.3; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0.3; transform: scale(0.8); }
-        }
         .container {
             background: rgba(255, 255, 255, 0.1);
             padding: 30px;
@@ -80,18 +59,61 @@
             background: linear-gradient(45deg, #005bea, #00c6ff);
             transform: scale(1.1);
         }
-        .fireworks {
+        .hidden-message {
+            display: none;
+            font-size: 1.2em;
+            margin-top: 15px;
+            color: #FFD700;
+            animation: fadeIn 2s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            from { transform: translateY(0); }
+            to { transform: translateY(-15px); }
+        }
+        @keyframes firework {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+        .firework {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
+            width: 15px;
+            height: 15px;
+            background: radial-gradient(circle, yellow, orange, red);
+            border-radius: 50%;
+            animation: firework 1.5s ease-out;
+        }
+        .footer {
+            margin-top: 15px;
+            font-size: 1em;
+            opacity: 0.9;
+            animation: fadeIn 4s ease-in-out;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
+        }
+        .music-control {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            padding: 12px 20px;
+            font-size: 1em;
+            color: white;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease-in-out;
+        }
+        .music-control:hover {
+            background: linear-gradient(45deg, #ff4b2b, #ff416c);
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
-    <div class="stars" id="stars"></div>
     <div class="container">
         <h1>Selamat Hari Raya Idul Fitri</h1>
         <p>Minal aidin wal faidzin, mohon maaf lahir dan batin.</p>
@@ -99,60 +121,29 @@
         <p class="hidden-message" id="message">🌙 Semoga kebahagiaan dan berkah selalu menyertai Anda! 🌟</p>
         <div class="footer">Dari: Mohammad Rifqi Adiyatma</div>
     </div>
-    <canvas class="fireworks" id="fireworks"></canvas>
+    <button class="music-control" onclick="stopMusic()">⏹ Stop Musik</button>
+    <audio id="tarot" src="tarot.mp3" loop></audio>
     <script>
-        function generateStars() {
-            let starsContainer = document.getElementById("stars");
-            for (let i = 0; i < 100; i++) {
-                let star = document.createElement("div");
-                star.classList.add("star");
-                star.style.left = Math.random() * 100 + "%";
-                star.style.top = Math.random() * 100 + "%";
-                star.style.animationDuration = (Math.random() * 3 + 2) + "s";
-                starsContainer.appendChild(star);
-            }
-        }
-        generateStars();
-
         function celebrate() {
-            let canvas = document.getElementById("fireworks");
-            let ctx = canvas.getContext("2d");
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            let particles = [];
-
-            function createParticles(x, y) {
-                for (let i = 0; i < 50; i++) {
-                    particles.push({
-                        x: x,
-                        y: y,
-                        vx: (Math.random() - 0.5) * 5,
-                        vy: (Math.random() - 0.5) * 5,
-                        alpha: 1
-                    });
-                }
+            document.getElementById("message").style.display = "block";
+            document.getElementById("tarot").play();
+            createFireworks();
+        }
+        
+        function stopMusic() {
+            document.getElementById("tarot").pause();
+            document.getElementById("tarot").currentTime = 0;
+        }
+        
+        function createFireworks() {
+            for (let i = 0; i < 15; i++) {
+                let firework = document.createElement("div");
+                firework.classList.add("firework");
+                document.body.appendChild(firework);
+                firework.style.left = Math.random() * 100 + "%";
+                firework.style.top = Math.random() * 100 + "%";
+                setTimeout(() => firework.remove(), 1500);
             }
-
-            function animateParticles() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach((p, index) => {
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.alpha -= 0.02;
-                    if (p.alpha <= 0) particles.splice(index, 1);
-                    ctx.fillStyle = `rgba(255, 255, 0, ${p.alpha})`;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-                    ctx.fill();
-                });
-                requestAnimationFrame(animateParticles);
-            }
-
-            canvas.addEventListener("click", function(event) {
-                createParticles(event.clientX, event.clientY);
-            });
-            createParticles(canvas.width / 2, canvas.height / 2);
-            animateParticles();
         }
     </script>
 </body>
