@@ -75,18 +75,6 @@
             from { transform: translateY(0); }
             to { transform: translateY(-10px); }
         }
-        @keyframes fallingStars {
-            from { transform: translateY(-100px) translateX(0); opacity: 1; }
-            to { transform: translateY(100vh) translateX(50px); opacity: 0; }
-        }
-        .star {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: white;
-            box-shadow: 0 0 10px white;
-            animation: fallingStars 3s linear infinite;
-        }
         .footer {
             margin-top: 15px;
             font-size: 1em;
@@ -125,7 +113,7 @@
     <button class="music-control" id="musicButton" onclick="toggleMusic()">🎵 Stop Musik</button>
     <audio id="tarot" src="tarot.mp3" loop></audio>
     <script>
-        let isPlaying = false;
+        let isPlaying = true;
         function toggleMusic() {
             let audio = document.getElementById("tarot");
             let button = document.getElementById("musicButton");
@@ -141,19 +129,6 @@
         }
         function celebrate() {
             document.getElementById("message").style.display = "block";
-            toggleMusic();
-            createStars();
-        }
-        function createStars() {
-            for (let i = 0; i < 20; i++) {
-                let star = document.createElement("div");
-                star.classList.add("star");
-                star.style.left = Math.random() * window.innerWidth + "px";
-                star.style.top = Math.random() * -100 + "px";
-                star.style.animationDuration = Math.random() * 3 + 2 + "s";
-                document.body.appendChild(star);
-                setTimeout(() => star.remove(), 5000);
-            }
         }
     </script>
 </body>
