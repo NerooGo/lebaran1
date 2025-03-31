@@ -17,32 +17,35 @@
             margin: 0;
             overflow: hidden;
             position: relative;
+            flex-direction: column;
+            padding: 20px;
         }
         .container {
             background: rgba(255, 255, 255, 0.1);
-            padding: 40px;
+            padding: 30px;
             border-radius: 20px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(15px);
             position: relative;
             animation: float 3s infinite alternate ease-in-out;
+            max-width: 90%;
         }
         h1 {
-            font-size: 3.5em;
+            font-size: 2.5em;
             margin-bottom: 15px;
             animation: fadeIn 2s ease-in-out;
             text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
         }
         p {
-            font-size: 1.8em;
+            font-size: 1.2em;
             animation: fadeIn 3s ease-in-out;
             text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
-            margin-top: 50px;
+            margin-top: 20px;
         }
         .btn {
-            margin-top: 25px;
-            padding: 14px 30px;
-            font-size: 1.4em;
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 1.2em;
             color: white;
             background: linear-gradient(45deg, #00c6ff, #0072ff);
             border: none;
@@ -58,8 +61,8 @@
         }
         .hidden-message {
             display: none;
-            font-size: 1.6em;
-            margin-top: 20px;
+            font-size: 1.2em;
+            margin-top: 15px;
             color: #FFD700;
             animation: fadeIn 2s ease-in-out;
         }
@@ -71,38 +74,40 @@
             from { transform: translateY(0); }
             to { transform: translateY(-15px); }
         }
+        @keyframes sparkle {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 2s infinite;
+        }
         .footer {
-            margin-top: 25px;
-            font-size: 1.4em;
+            margin-top: 15px;
+            font-size: 1em;
             opacity: 0.9;
             animation: fadeIn 4s ease-in-out;
             text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.4);
         }
-        .confetti {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        .confetti span {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: gold;
-            opacity: 0.8;
-            animation: fall 5s linear infinite;
-        }
-        @keyframes fall {
-            from { transform: translateY(-100vh) rotate(0deg); }
-            to { transform: translateY(100vh) rotate(720deg); }
-        }
         .music-control {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            font-size: 1.2em;
+            bottom: 15px;
+            right: 15px;
+            padding: 12px 20px;
+            font-size: 1em;
             color: white;
             background: linear-gradient(45deg, #ff416c, #ff4b2b);
             border: none;
@@ -118,7 +123,7 @@
     </style>
 </head>
 <body>
-    <div class="confetti" id="confetti"></div>
+    <div class="stars" id="stars"></div>
     <div class="container">
         <h1>Selamat Hari Raya Idul Fitri</h1>
         <p>Minal aidin wal faidzin, mohon maaf lahir dan batin.</p>
@@ -131,25 +136,26 @@
     <script>
         function celebrate() {
             document.getElementById("message").style.display = "block";
-            let confettiContainer = document.getElementById("confetti");
             document.getElementById("tarot").play();
-            for (let i = 0; i < 100; i++) {
-                let confetti = document.createElement("span");
-                confetti.style.left = Math.random() * 100 + "vw";
-                confetti.style.top = Math.random() * 100 + "vh";
-                confetti.style.animationDuration = (Math.random() * 3 + 2) + "s";
-                confetti.style.backgroundColor = ["gold", "red", "blue", "green", "purple"][Math.floor(Math.random() * 5)];
-                confettiContainer.appendChild(confetti);
-            }
-            setTimeout(() => {
-                confettiContainer.innerHTML = "";
-            }, 5000);
         }
         
         function stopMusic() {
             document.getElementById("tarot").pause();
             document.getElementById("tarot").currentTime = 0;
         }
+        
+        function createStars() {
+            const starsContainer = document.getElementById("stars");
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement("div");
+                star.classList.add("star");
+                star.style.top = Math.random() * 100 + "%";
+                star.style.left = Math.random() * 100 + "%";
+                star.style.animationDuration = (Math.random() * 2 + 1) + "s";
+                starsContainer.appendChild(star);
+            }
+        }
+        createStars();
     </script>
 </body>
 </html>
